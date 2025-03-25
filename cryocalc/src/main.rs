@@ -32,7 +32,10 @@ impl CryoCalc {
             //gets triggered when typing expressions in the calculators display
             Message::DisplayContentChanged(content) => {
                 self.display_content = content;
-            }
+            },
+            Message::ButtonPressed(value) => {
+                self.display_content.push_str(&value);
+            },
         }
     }
 
@@ -42,7 +45,8 @@ impl CryoCalc {
                 column![
                     //example, shows a text input widget w
                     text_input("...", &self.display_content)
-                        .on_input(Message::DisplayContentChanged)
+                        .on_input(Message::DisplayContentChanged),
+                    button("1").on_press(Message::ButtonPressed(String::from("1")))
                 ].into()
            },
        }
@@ -52,6 +56,7 @@ impl CryoCalc {
 #[derive(Debug, Clone)]
 enum Message {
     DisplayContentChanged(String),
+    ButtonPressed(String)
     //Likely this needs some kind of button pressed message that tells us which button has been
     //pressed?
 }
