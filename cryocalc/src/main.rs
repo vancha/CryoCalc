@@ -1,6 +1,9 @@
-use iced::widget::{button, column, row, text, text_input, Text};
+use iced::widget::{button, column, row, text_input, Text};
 use iced::{Element, Length};
 use std::fmt;
+
+pub mod screens;
+use screens::{ regular, hex, binary };
 
 // This is the struct that will eventually be able to parse the expressions
 // Through something like  ```let result = ExpressionParser::Parse("1 + 5 / (9 * 3)");```
@@ -235,6 +238,15 @@ impl CryoCalc {
 
     fn update(self: &mut CryoCalc, message: Message) {
         match message {
+            Message::RegularCalculatorMessage(m) => {
+                todo!()
+            }
+            Message::BinaryCalculatorMessage(_) => {
+                todo!()
+            }
+            Message::HexadecimalCalculatorMessage(_) => {
+                todo!()
+            }
             Message::DisplayContentChanged(content) => {
                 self.display_content = content;
             }
@@ -335,9 +347,11 @@ impl CryoCalc {
         match self.mode {
             CalculatorMode::Regular => {
                 column![
-                    // Example, shows a text input widget w
-                    text_input("...", &self.display_content)
-                        .on_input(Message::DisplayContentChanged),
+                    column![
+                        // Example, shows a text input widget w
+                        text_input("...", &self.display_content)
+                            .on_input(Message::DisplayContentChanged),
+                    ],
                     column![
                         row![
                             CryoCalc::button(Token::ClearScreen),
@@ -400,4 +414,7 @@ enum Message {
     DisplayContentChanged(String),
     ButtonPressed(Token), //Likely this needs some kind of button pressed message that tells us which button has been
                           //pressed?
+    RegularCalculatorMessage(regular::Message),
+    BinaryCalculatorMessage(binary::Message),
+    HexadecimalCalculatorMessage(hex::Message),
 }
