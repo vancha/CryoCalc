@@ -75,7 +75,8 @@ impl fmt::Debug for Token {
             Token::RightParenthesis => ")".to_string(),
             Token::Operator(op) => format!("{:?}", op),
             Token::Equals => "=".to_string(),
-            _ => { "@".to_string()  }, //tokens that are not used for calculations, show up as @
+            Token::ClearScreen => "CLEAR".to_string(),
+            Token::ClearToken => "<<".to_string(),
         };
         write!(f, "{}", token_str)
     }
@@ -298,7 +299,10 @@ impl CryoCalc {
                         self.display_content = "".to_string();
                     },
                     Token::ClearToken => {
-                        self.display_content = String::from(&self.display_content[0..self.display_content.len()-1]);
+                        if self.display_content.len() > 1 {
+                            self.display_content = String::from(&self.display_content[0..self.display_content.len()-1]);
+                        }
+
                     }
                 }
                 println!("\n{:?}", self.token_stream);
@@ -327,9 +331,9 @@ impl CryoCalc {
                     // Example, shows a text input widget w
                     text_input("...", &self.display_content)
                         .on_input(Message::DisplayContentChanged),
-                    row![ CryoCalc::button(Token::ClearScreen), CryoCalc::button(Token::Operator(Operator::Division)) ],
-                    row![ CryoCalc::button(Token::Number(7)),CryoCalc::button(Token::Number(8)),CryoCalc::button(Token::Number(9)), CryoCalc::button(Token::Operator(Operator::Division)) ],
-                    row![ CryoCalc::button(Token::Number(4)),CryoCalc::button(Token::Number(5)),CryoCalc::button(Token::Number(6)), CryoCalc::button(Token::Operator(Operator::Division)) ],
+                    row![ CryoCalc::button(Token::ClearScreen), CryoCalc::button(Token::Operator(Operator::Division)),CryoCalc::button(Token::ClearToken) ],
+                    row![ CryoCalc::button(Token::Number(7)),CryoCalc::button(Token::Number(8)),CryoCalc::button(Token::Number(9)), CryoCalc::button(Token::Operator(Operator::Multiplication)) ],
+                    row![ CryoCalc::button(Token::Number(4)),CryoCalc::button(Token::Number(5)),CryoCalc::button(Token::Number(6)), CryoCalc::button(Token::Operator(Operator::Subtraction)) ],
                     row![ CryoCalc::button(Token::Number(1)),CryoCalc::button(Token::Number(2)),CryoCalc::button(Token::Number(3)), CryoCalc::button(Token::Operator(Operator::Addition)) ],
                     row![ CryoCalc::button(Token::Number(0)),CryoCalc::button(Token::Number(0)),CryoCalc::button(Token::Number(9)), CryoCalc::button(Token::Equals) ],
                 ].into()
