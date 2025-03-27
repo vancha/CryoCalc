@@ -1,4 +1,4 @@
-use iced::widget::{button, column, row, text, text_input};
+use iced::widget::{button, column, row, text,Text, text_input};
 use iced::Element;
 use std::fmt;
 
@@ -309,11 +309,9 @@ impl CryoCalc {
 
     fn button<'a>(token: Token)-> Element<'a, Message> {
         let str_from_token = token.to_string();
-        let tmp = str_from_token.as_str();
         match token {
             _ => {
-                //button(token).on_press(Message::ButtonPressed(Token::Number(9))).into()
-                button("tmp")
+                button(Text::new(str_from_token))
                     .on_press(
                         Message::ButtonPressed(token)
                     )
