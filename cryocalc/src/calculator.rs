@@ -9,7 +9,6 @@ pub struct Calculator {
     parentheses_opened: bool,
 }
 
-
 impl Calculator {
     pub fn new() -> Self {
         Calculator {
@@ -49,7 +48,8 @@ impl Calculator {
                     self.token_stream.push(Token::Number(self.num));
                     self.num = 0;
                     self.number_was_pressed = false;
-                    self.token_stream.push(Token::Operator(Operator::Multiplication));
+                    self.token_stream
+                        .push(Token::Operator(Operator::Multiplication));
                 }
                 self.token_stream.push(Token::LeftParenthesis);
                 self.parentheses_opened = true;
@@ -169,11 +169,19 @@ impl Calculator {
     }
 
     pub fn evaluate(&mut self) -> i64 {
-        if !self.token_stream.iter().any(|t| matches!(t, Token::LeftParenthesis)) {
+        if !self
+            .token_stream
+            .iter()
+            .any(|t| matches!(t, Token::LeftParenthesis))
+        {
             return self.evaluate_full_expression();
         }
 
-        while self.token_stream.iter().any(|t| matches!(t, Token::LeftParenthesis)) {
+        while self
+            .token_stream
+            .iter()
+            .any(|t| matches!(t, Token::LeftParenthesis))
+        {
             let mut stack = Vec::new();
             let mut start_idx = None;
             let mut end_idx = None;

@@ -1,7 +1,5 @@
 pub struct BinaryCalculator;
 
-#[derive(Debug, Clone)]
-pub enum Message {
-
-}
-
+//#[derive(Debug, Clone)]
+//pub enum Message {
+//}
