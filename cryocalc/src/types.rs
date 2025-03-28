@@ -1,4 +1,3 @@
-// types.rs
 use std::fmt;
 
 #[derive(Default, Clone)]
