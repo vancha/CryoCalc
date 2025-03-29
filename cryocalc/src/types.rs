@@ -3,9 +3,9 @@ use std::fmt;
 #[derive(Default, Clone)]
 pub enum CalculatorMode {
     #[default]
-    Regular,
-    Hexadecimal,
+    Decimal,
     Binary,
+    Hex,
 }
 
 #[derive(Clone)]
@@ -14,6 +14,15 @@ pub enum Operator {
     Subtraction,
     Multiplication,
     Division,
+}
+
+impl Token {
+    pub fn is_valid_for_base(&self, base: u8) -> bool {
+        match self {
+            Token::Number(n) => *n < base as i64,
+            _ => true,
+        }
+    }
 }
 
 impl fmt::Debug for Operator {

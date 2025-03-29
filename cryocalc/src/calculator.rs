@@ -7,23 +7,29 @@ pub struct Calculator {
     num: i64,
     number_was_pressed: bool,
     parentheses_opened: bool,
+    base: u8,
 }
 
 impl Calculator {
     pub fn new() -> Self {
         Calculator {
-            token_stream: Vec::new(),
-            num: 0,
-            number_was_pressed: false,
-            parentheses_opened: false,
+            base: 10,
+            ..Default::default()
         }
+    }
+
+    pub fn with_base(mut self, base: u8) -> Self {
+        self.base = base;
+        self
     }
 
     pub fn add_token(&mut self, token: Token) {
         match token {
             Token::Number(n) => {
-                self.num = self.num * 10 + n;
-                self.number_was_pressed = true;
+                if n < self.base as i64 {
+                    self.num = self.num * self.base as i64 + n;
+                    self.number_was_pressed = true;
+                }
             }
             Token::Operator(o) => {
                 if !self.number_was_pressed {
@@ -93,14 +99,33 @@ impl Calculator {
         if self.token_stream.is_empty() && !self.number_was_pressed {
             return String::new();
         }
+        
         let mut display = String::new();
+        
+        // Format existing tokens with current base
         for token in &self.token_stream {
-            display.push_str(&token.to_string());
+            let formatted = match token {
+                Token::Number(n) => match self.base {
+                    2 => format!("{:b}", n),
+                    16 => format!("{:X}", n),
+                    _ => n.to_string(),
+                },
+                _ => token.to_string(),
+            };
+            display.push_str(&formatted);
             display.push(' ');
         }
+        
+        // Format current number being entered
         if self.number_was_pressed {
-            display.push_str(&self.num.to_string());
+            let current = match self.base {
+                2 => format!("{:b}", self.num),
+                16 => format!("{:X}", self.num),
+                _ => self.num.to_string(),
+            };
+            display.push_str(&current);
         }
+        
         display.trim().to_string()
     }
 
