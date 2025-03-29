@@ -40,21 +40,6 @@ impl Default for CryoCalc {
     }
 }
 
-// This shows the different screens, every screen holds it's own state
-// default cannot be derived because that only works for enum unit(empty) variants
-enum Screen {
-    DecCalcScreen(dec::DecCalcState),
-    
-}
-
-impl Default for Screen {
-    fn default() -> Self {
-        // We make the application start with showing the "regular" calculator screen
-        return Screen::DecCalcScreen(dec::DecCalcState::new());
-    }
-}
-
-
 pub fn main() -> iced::Result {
     iced::application("CryoCalc", CryoCalc::update, CryoCalc::view)
         .theme(|_| Theme::Oxocarbon)
