@@ -12,6 +12,7 @@ use types::{CalculatorMode};
 mod binary;
 mod hex;
 mod dec;
+mod theme;
 
 //#[derive(Default)]
 struct CryoCalc {

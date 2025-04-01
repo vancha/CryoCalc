@@ -1,4 +1,8 @@
 use crate::{calculator::Calculator, types::Token, types::Operator};
+use std::boxed::Box;
+
+
+use crate::theme::{MyTheme,ButtonClass};
 
 use iced::{
     widget::{button, column, row, text_input, Button, Text},
@@ -16,17 +20,20 @@ pub struct DecCalcState {
 #[derive(Debug, Clone)]
 pub enum Message {
     ButtonPressed(Token),
-    //SwitchMode,
+    ForParent(Box<Message>),//SwitchMode,
     DisplayContentChanged(String),
 }
 
+
 impl DecCalcState {
     fn button<'a>(token: Token) -> Element<'a, Message> {
+        let my_theme = MyTheme;
         let str_from_token = token.to_string();
         match token {
             _ => button(Text::new(str_from_token))
                 .on_press(Message::ButtonPressed(token))
                 .width(Length::Fill)
+                .style(move |theme, status| my_theme.style(&ButtonClass::Primary, status))
                 .padding(16)
                 .into(),
         }
@@ -54,6 +61,9 @@ impl DecCalcState {
                 println!("\n{:?}", self.calculator.token_stream);
             }
             Message::DisplayContentChanged(_) => {
+                todo!();
+            }
+            Message::ForParent(_) => {
                 todo!();
             }
         }
